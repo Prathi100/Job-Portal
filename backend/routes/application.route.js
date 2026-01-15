@@ -1,5 +1,5 @@
 import express from "express";
-import isAuthenticated from "../middleware/isAuthenticated.js";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
 import { applyJob, getApplicants, getAppliedJobs, updateStatus } from "../controllers/application.controller.js";
 
 const router = express.Router();
@@ -16,4 +16,4 @@ router.route("/applicants/:id").get(isAuthenticated, getApplicants);
 // Update application status
 router.route("/application/:id/status").post(isAuthenticated, updateStatus);
 
-export default router;
+export default router;  // Fixed: Changed from 'route' to 'router'

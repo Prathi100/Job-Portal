@@ -1,15 +1,14 @@
 import Navbar from "../shared/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { RadioGroup } from "../ui/radio-group";
 import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "@/redux/authSlice";
+import { setLoading, setUser } from "@/redux/authSlice";
 import { Loader2 } from "lucide-react";
 
 const Login = () => {
@@ -19,7 +18,7 @@ const Login = () => {
     role: "",
   });
 
-  const {loading} = useSelector((state) => state.auth);
+  const {loading, user} = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -50,7 +49,9 @@ const Login = () => {
 
       if (res.data.success) {
         toast.success(res.data.message);
-        navigate("/"); // ✅ use navigate, not Navigate()
+        dispatch(setUser(res.data.user));
+        navigate("/"); 
+
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || "Login failed");
@@ -58,7 +59,11 @@ const Login = () => {
       dispatch(setLoading(false));
     }
   };
-
+useEffect(()=>{
+        if(user){
+            navigate("/");
+        }
+    },[])
   return (
     <div>
       <Navbar />
